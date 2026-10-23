@@ -1,0 +1,17 @@
+# Normalize line endings across platforms.
+* text=auto eol=lf
+
+*.py text diff=python
+*.md text
+*.yml text
+*.yaml text
+*.toml text
+*.json text
+*.j2 text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

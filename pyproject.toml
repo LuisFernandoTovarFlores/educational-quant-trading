@@ -1,0 +1,99 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quant-swing-trading"
+version = "0.1.0"
+description = "An educational, rules-based quantitative swing-trading research framework for liquid US equities and ETFs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Luis Fernando Tovar Flores" }]
+keywords = [
+  "quantitative-finance",
+  "swing-trading",
+  "algorithmic-trading",
+  "technical-analysis",
+  "backtesting",
+  "python",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial :: Investment",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+  "yfinance>=0.2.31",
+  "pandas>=2.0.0",
+  "numpy>=1.24.0",
+  "PyYAML>=6.0",
+  "requests>=2.31.0",
+  "Jinja2>=3.1.0",
+]
+
+[project.optional-dependencies]
+fred = ["fredapi>=0.5.0"]
+dev = [
+  "pytest>=8.0.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.6.0",
+  "pre-commit>=3.7.0",
+]
+
+[project.scripts]
+swing-trading = "src.run_weekly:main"
+swing-trading-report = "src.executive_report:main"
+
+[project.urls]
+Homepage = "https://github.com/LuisFernandoTovarFlores/educational-quant-trading"
+Repository = "https://github.com/LuisFernandoTovarFlores/educational-quant-trading"
+Issues = "https://github.com/LuisFernandoTovarFlores/educational-quant-trading/issues"
+
+[tool.setuptools]
+packages = ["src", "config"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not integration'"
+markers = [
+  "integration: tests that download market data or call external APIs",
+]
+filterwarnings = [
+  "ignore::DeprecationWarning:yfinance.*",
+]
+
+[tool.coverage.run]
+source = ["src", "config"]
+omit = ["*/__main__.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [".git", ".venv", "venv", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "single"

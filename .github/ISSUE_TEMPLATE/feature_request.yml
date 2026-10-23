@@ -1,0 +1,51 @@
+name: Feature request
+description: Suggest an idea or improvement.
+title: "[feat]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check the roadmap and existing issues first. Large features should
+        start as a discussion.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem would this feature solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Backtesting
+        - Scoring / decision
+        - Risk / stops
+        - Data ingestion
+        - Reporting
+        - Documentation
+        - Tests / CI
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues and discussions.
+          required: true
+        - label: I understand this project is educational and not financial advice.
+          required: true

@@ -1,0 +1,18 @@
+{
+  "position": {
+    "ticker": "AAPL",
+    "entry_price_usd": 200.0,
+    "entry_date": "2026-01-05",
+    "stop_loss_usd": 185.0
+  },
+  "capital": {
+    "initial_mxn": 100000.0,
+    "current_mxn": 100000.0,
+    "return_pct": 0.0
+  },
+  "history": [],
+  "last_fee_week": null,
+  "fees": [],
+  "last_review": "2026-01-05",
+  "next_review": "2026-01-12"
+}

@@ -1,0 +1,222 @@
+# Reporte Ejecutivo — {{ ticker }}
+**Fecha:** {{ date }}
+**Régimen de Mercado:** {{ regime }} (Confianza: {{ (regime_confidence * 100) | round(1) }}%)
+
+---
+
+## 📊 Resumen Ejecutivo
+
+**Posición Actual:** {{ position.ticker }}
+**Precio de Entrada:** ${{ position.entry_price }} USD
+**Stop Loss:** ${{ position.stop_loss }} USD
+**Capital Actual:** ${{ capital.current_mxn | number_format }} MXN
+**Retorno Acumulado:** {{ capital.return_pct }}%
+
+**Decisión:** {{ decision }}
+
+{% if decision == 'ROTATE' %}
+**Rotación Recomendada:** {{ position.ticker }} → {{ rotation_candidate }}
+**Precio Objetivo:** ${{ candidate_price }} USD
+**Stop Loss Nuevo:** ${{ candidate_stop }} USD
+{% endif %}
+
+---
+
+## 📈 Análisis Técnico
+
+### Indicadores Principales
+| Indicador | Valor | Señal |
+|-----------|-------|-------|
+| EMA21 | ${{ technicals.ema21 }} | {{ '✅ Sobre' if technicals.above_ema21 else '❌ Bajo' }} |
+| RSI14 | {{ technicals.rsi }} | {{ '⚠️ Sobrecomprado' if technicals.rsi > 70 else ('⚠️ Sobreventa' if technicals.rsi < 30 else '✅ Normal') }} |
+| ATR14 | {{ technicals.atr }} ({{ technicals.atr_pct }}%) | Volatilidad {{ 'alta' if technicals.atr_pct > 4 else ('media' if technicals.atr_pct > 2 else 'baja') }} |
+
+### Momentum
+- **Retorno 5d:** {{ technicals.ret_5d }}%
+- **Retorno 20d:** {{ technicals.ret_20d }}%
+- **Distancia a máximo 20d:** {{ technicals.dist_high }}%
+
+### Indicadores Avanzados
+| Indicador | Valor | Interpretación |
+|-----------|-------|----------------|
+| MACD | {{ advanced.macd }} | {{ '✅ Bullish' if advanced.macd_bullish else '❌ Bearish' }} |
+| ADX | {{ advanced.adx }} | {{ '✅ Tendencia fuerte' if advanced.adx > 25 else '⚠️ Tendencia débil' }} |
+| Bollinger %B | {{ advanced.bb_percent_b }} | {{ '⚠️ Sobrecomprado' if advanced.bb_percent_b > 0.8 else ('⚠️ Sobreventa' if advanced.bb_percent_b < 0.2 else '✅ Normal') }} |
+| Supertrend | {{ advanced.supertrend }} | {{ '✅ Bullish' if advanced.supertrend_bullish else '❌ Bearish' }} |
+
+**Estructura de Mercado:** {{ advanced.market_structure }}
+**Setup Actual:** {{ advanced.current_setup }}
+
+### Niveles Clave
+- **Soportes:** {{ advanced.support_levels | join(', $') }}
+- **Resistencias:** {{ advanced.resistance_levels | join(', $') }}
+
+---
+
+## 💰 Análisis Fundamental
+
+{% if fundamentals.type == 'stock' %}
+### Empresa: {{ fundamentals.name }}
+**Industria:** {{ fundamentals.industry }}
+**Sector:** {{ fundamentals.sector }}
+**Market Cap:** ${{ fundamentals.market_cap | number_format }}M
+
+### Valoración
+| Métrica | Valor | Veredicto |
+|---------|-------|-----------|
+| P/E Ratio | {{ fundamentals.pe_ratio }} | {{ valuation_verdict }} |
+| P/B Ratio | {{ fundamentals.pb_ratio }} | - |
+
+### Rentabilidad
+- **ROE:** {{ fundamentals.roe }}%
+- **Margen Neto:** {{ fundamentals.net_margin }}%
+- **Dividend Yield:** {{ fundamentals.dividend_yield }}%
+
+### Crecimiento
+- **Revenue Growth:** {{ fundamentals.revenue_growth }}%
+- **Earnings Growth:** {{ fundamentals.earnings_growth }}%
+
+{% else %}
+### ETF: {{ fundamentals.name }}
+**Categoría:** {{ fundamentals.category }}
+**Total Assets:** ${{ fundamentals.total_assets | number_format }}
+
+### Características
+- **Expense Ratio:** {{ fundamentals.expense_ratio }}%
+- **Dividend Yield:** {{ fundamentals.dividend_yield }}%
+- **Beta (3Y):** {{ fundamentals.beta_3y }}
+- **Número de Holdings:** {{ fundamentals.num_holdings }}
+
+{% endif %}
+
+---
+
+## 🌍 Contexto Macro
+
+### Indicadores Clave
+| Indicador | Valor | Señal |
+|-----------|-------|-------|
+| VIX | {{ macro.vix }} | {{ '⚠️ Alto' if macro.vix > 25 else ('⚠️ Moderado' if macro.vix > 20 else '✅ Bajo') }} |
+| SPY vs 200d MA | {{ macro.spy_vs_200ma }}% | {{ '✅ Sobre' if macro.spy_vs_200ma > 0 else '❌ Bajo' }} |
+| Curva de Tasas (10Y-2Y) | {{ macro.yield_curve }}% | {{ '⚠️ Invertida' if macro.yield_curve < 0 else '✅ Normal' }} |
+| DXY | {{ macro.dxy }} | Fortaleza del dólar |
+
+### Régimen de Mercado: {{ regime }}
+
+{% if regime == 'RISK_ON' %}
+✅ **Ambiente propicio para activos de riesgo**
+- ETFs apalancados permitidos (TQQQ, SOXL, FNGU)
+- Estrategias de momentum y trend-following recomendadas
+{% elif regime == 'RISK_OFF' %}
+❌ **Ambiente adverso para activos de riesgo**
+- ETFs apalancados bloqueados
+- Considerar ETFs inversos (SQQQ, SOXS) o cash proxy (SGOV, BIL)
+- Reducir exposición o mover a cash proxy
+{% else %}
+⚠️ **Condiciones mixtas**
+- Solo activos estándar permitidos
+- Estrategias selectivas, evitar leverage
+{% endif %}
+
+---
+
+## 📰 Noticias y Sentimiento
+
+**Total de artículos (7 días):** {{ news.total_articles }}
+
+### Análisis de Sentimiento
+- **Positivos:** {{ news.sentiment.positive }}
+- **Negativos:** {{ news.sentiment.negative }}
+- **Neutrales:** {{ news.sentiment.neutral }}
+- **Sentimiento promedio:** {{ news.sentiment.average_sentiment }}
+- **Label:** {{ news.sentiment.sentiment_label }}
+
+### Noticias Destacadas
+{% for article in news.articles[:3] %}
+{{ loop.index }}. **{{ article.title }}**
+   - Fuente: {{ article.source_name }}
+   {% if article.sentiment %}- Sentimiento: {{ article.sentiment }}{% endif %}
+   - URL: {{ article.url }}
+
+{% endfor %}
+
+---
+
+## 🎯 Recomendación
+
+### Acción: {{ decision }}
+
+{% if decision == 'HOLD' %}
+**Mantener posición actual en {{ position.ticker }}**
+- Stop loss en ${{ position.stop_loss or 'N/A' }} USD
+- Monitorear diariamente
+- Próxima revisión: {{ next_review }}
+
+{% elif decision == 'HOLD_WITH_WARNINGS' %}
+**Mantener {{ position.ticker }} con advertencias**
+
+**Razones:**
+{% for reason in rotation_reasons %}
+- {{ reason }}
+{% endfor %}
+
+- Stop loss en ${{ position.stop_loss or 'N/A' }} USD
+- Revisar manualmente antes de operar
+- Próxima revisión: {{ next_review }}
+
+{% elif decision == 'ROTATE' %}
+**Rotar de {{ position.ticker }} a {{ rotation_candidate }}**
+
+**Razones:**
+{% for reason in rotation_reasons %}
+- {{ reason }}
+{% endfor %}
+
+**Ejecución:**
+1. Vender {{ position.ticker }} a precio de mercado
+2. Comprar {{ rotation_candidate }} a ${{ candidate_price }} USD
+3. Colocar stop loss en ${{ candidate_stop }} USD
+4. Tamaño de posición: {{ position_size }} acciones
+
+**Stop Loss:** ${{ candidate_stop }} USD ({{ candidate_stop_pct }}% de riesgo)
+
+{% else %}
+**No operar**
+- No hay una señal clara en este momento
+- Considerar cash proxy (SGOV/BIL) si no hay posición
+{% endif %}
+
+---
+
+## ⚠️ Riesgos y Consideraciones
+
+1. **Concentración:** 100% del capital en un solo activo
+2. **FX:** Riesgo cambiario USD/MXN no cubierto
+3. **Volatilidad:** ATR {{ technicals.atr_pct }}% indica volatilidad {{ 'alta' if technicals.atr_pct > 4 else ('media' if technicals.atr_pct > 2 else 'baja') }}
+4. **Régimen:** {{ 'Condiciones favorables' if regime == 'RISK_ON' else ('Condiciones adversas' if regime == 'RISK_OFF' else 'Condiciones mixtas') }}
+
+---
+
+## 📋 Checklist de Ejecución
+
+- [ ] Verificar pre-market (no gap >2% abajo)
+- [ ] Confirmar ausencia de noticias macro adversas
+{% if decision == 'ROTATE' %}
+- [ ] Ejecutar rotación: vender {{ position.ticker }}, comprar {{ rotation_candidate }}
+- [ ] Colocar stop loss en ${{ candidate_stop }} USD
+{% else %}
+- [ ] Validar que stop loss esté colocado en ${{ position.stop_loss }} USD
+{% endif %}
+- [ ] Registrar precio real de ejecución
+- [ ] Actualizar portfolio.json
+
+---
+
+*Generado: {{ generated_at }}*
+*Próxima revisión: {{ next_review }}*
+
+---
+
+> **Aviso:** este reporte es investigación educativa y no constituye asesoría
+> financiera. El sistema no garantiza rendimientos y puede perder capital.
+> Verifica los datos y los niveles de stop con tu bróker antes de operar.

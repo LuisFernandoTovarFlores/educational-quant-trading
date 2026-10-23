@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Data (never commit downloaded market data)
+data/raw/
+data/processed/
+data/cache/
+*.csv
+*.parquet
+*.pkl
+!examples/*.csv
+
+# State (contains personal portfolio data)
+state/portfolio.json
+state/*.json
+!state/portfolio.example.json
+
+# Output (generated reports, screener, dossiers)
+output/
+
+# IDE / editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+!*.env.example
+
+# Testing / linting artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ruff_cache/
+.mypy_cache/
+.pre-commit-cache/
+*.log
+
+# Logs
+logs/
